@@ -1,32 +1,40 @@
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <string.h>
 
+#define MAX_N 20000
+#define MAX_L 50
 
-//비교 수행하는 함수, qsort의 4번째 인자
-int compare(const void* arg1, const void* arg2) 
-{   //길이순 정렬
-	if (strlen((const char*)arg1) > strlen((const char*)arg2)) return 1;
-	else if (strlen((const char*)arg1) < strlen((const char*)arg2)) return -1;
-	//길이 같으면 사전순
-	else return strcmp((char*)arg1, (char*)arg2);
-} 
-int main(void)
-{    
-	int size, length = 51;
-	char arr[20000][51] = { 0 };
-	scanf("%d", &size);
+char words[MAX_N][MAX_L + 1];
+int length[MAX_N];
 
-	for (int i = 0; i < size; i++)      
-		scanf("%s", arr[i]);
+int cmp(const void* a, const void* b) {
+    if (length[*(int*)a] != length[*(int*)b]) {
+        return length[*(int*)a] - length[*(int*)b];
+    } else {
+        return strcmp(words[*(int*)a], words[*(int*)b]);
+    }
+}
 
-	//정렬
-	qsort(arr, size, sizeof(arr[0]), compare);
-	
-	//정렬 후 같은 문자열은 생략하고 출력
-	for (int i = 0; i < size; i++) {
-		if (strcmp(arr[i], arr[i+1]) != 0 || i == size - 1)
-			printf("%s\n", arr[i]);
-	}
-	return 0;
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int indices[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%s", words[i]);
+        length[i] = strlen(words[i]);
+        indices[i] = i;
+    }
+
+    qsort(indices, n, sizeof(int), cmp);
+
+    for (int i = 0; i < n; i++) {
+        if (i > 0 && strcmp(words[indices[i]], words[indices[i-1]]) == 0) {
+            continue;
+        }
+        printf("%s\n", words[indices[i]]);
+    }
+
+    return 0;
 }
