@@ -1,35 +1,81 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define SIZE 1001
+
+typedef struct {
+	int queue[SIZE];
+	int front, rear;
+}QueueType;
+
+void init_queue(QueueType* q)
+{
+	q->front = q->rear = 0;
+}
+
+int is_full(QueueType* q)
+{
+	return ((q->rear + 1) % SIZE == q->front);
+}
+
+int is_empty(QueueType* q)
+{
+	return (q->front == q->rear);
+}
+
+void push(QueueType* q, int e)
+{
+	if (is_full(q))
+		return;
+
+	q->rear = (q->rear + 1) % SIZE;
+	q->queue[q->rear] = e;
+}
+
+int pop(QueueType* q)
+{
+	if (is_empty(q))
+		return -1;
+
+	q->front = (q->front + 1) % SIZE;
+	return q->queue[q->front];
+}
+
+int size(QueueType* q)
+{
+	if (q->front < q->rear)
+		return q->rear - q->front;
+	else
+		return SIZE - q->front + q->rear;
+}
+
 int main()
 {
-	int i, j, N, K, cnt, idx;
+	QueueType Q; init_queue(&Q);
+
+	int i, j, N, K, tmp;
 
 	scanf("%d %d", &N, &K);
 
-	int* table = (int*)calloc(N, sizeof(int));
-
-	for (i = 0; i < N; i++) /*값 채워넣기*/
+	for (i = 0; i < N; i++)
 	{
-		table[i] = i + 1;
+		push(&Q, i + 1);
 	}
 
-	printf("<%d", table[K - 1]); /*첫번째 제거 처리*/
-	table[K - 1] = -1;
-
-	for (i = 0, idx = K; i < N - 1; i++) /*두번째 제거부터 시작*/
+	printf("<");
+	for (i = 0; i < N; i++)
 	{
-		cnt = 0; j = -1;
-		while (cnt < K) /* 값이 존재하는 배열을 K번 지날때까지 j += 1 */
+		for (j = 0; j < K - 1; j++)
 		{
-			j += 1;
-			if (table[(idx + j) % N] != -1)
-				cnt += 1;
+			tmp = pop(&Q);
+			push(&Q, tmp);
 		}
-		idx = (idx + j) % N; /*인덱스 갱신*/
-		printf(", %d", table[idx]);
-		table[idx] = -1;
+		if (size(&Q) == 1)
+			break;
+		tmp = pop(&Q);
+		printf("%d, ", tmp);
 	}
-	printf(">");
+	printf("%d>", pop(&Q));
+
 	return 0;
 }
