@@ -1,8 +1,11 @@
-#include <stdio.h>
-int main(){
-	int a=0, b=0;
-	scanf("%d %d",&a,&b);
-    a=a-b;
-	printf("%d",a);
-	return 0;
+#include <iostream>
+using namespace std;
+
+int main() {
+  int A, B;
+  cin >> A >> B; 
+  
+  cout << A - B << endl;
+
+  return 0;  
 }
