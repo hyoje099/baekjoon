@@ -1,13 +1,17 @@
-#include <stdio.h>
-int main(){
-	int a=0, b=0;
-	scanf("%d %d",&a,&b);
-    if(a<b){
-        printf("<");
-    }else if(a>b){
-        printf(">");
-    }else{
-        printf("==");
+#include <iostream>
+using namespace std;
+
+int main() {
+    int A, B;
+    cin >> A >> B;
+    
+    if (A > B) {
+        cout << ">" << endl;
+    } else if (A < B) {
+        cout << "<" << endl;
+    } else {
+        cout << "==" << endl;
     }
-	return 0;
+    
+    return 0;
 }
